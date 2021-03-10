@@ -1,11 +1,14 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+
+import MainStack from './routes/MainStack';
+// import {Text, View} from 'react-native';
 
 const App: React.FC = () => {
   return (
-    <View>
-      <Text>Home</Text>
-    </View>
+    <NavigationContainer>
+      <MainStack />
+    </NavigationContainer>
   );
 };
 
