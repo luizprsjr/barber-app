@@ -1,15 +1,10 @@
-import IUser from '../interfaces/User';
+import {IUser, IUserActions} from '../interfaces/User';
 
 export const initialState: IUser = {
   avatar: '',
   favorites: [],
   appointments: [],
 };
-
-interface IUserActions {
-  type: 'setAvatar' | '';
-  payload: IUser;
-}
 
 export const UserReducer = (state: IUser, action: IUserActions) => {
   switch (action.type) {

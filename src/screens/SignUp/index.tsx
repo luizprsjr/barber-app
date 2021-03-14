@@ -10,12 +10,15 @@ import {
   SignMessageButtonTextBold,
 } from './styles';
 
+import api from '../../services/api';
+
 import SignInput from '../../components/SignInput';
 
 import BarberLogo from '../../assets/barber.svg';
 import PersonlIcon from '../../assets/person.svg';
 import EmailIcon from '../../assets/email.svg';
 import LockIcon from '../../assets/lock.svg';
+import {Alert} from 'react-native';
 
 const SignUp: React.FC = () => {
   const navigation = useNavigation();
@@ -24,7 +27,28 @@ const SignUp: React.FC = () => {
   const [emailField, setEmailField] = useState('');
   const [passwordField, setPasswordField] = useState('');
 
-  const handleSignClick = useCallback(() => {}, []);
+  const handleSignClick = useCallback(async () => {
+    if (nameField && emailField && passwordField) {
+      const {data} = await api.post('/user', {
+        name: nameField,
+        email: emailField,
+        password: passwordField,
+      });
+
+      console.log(data);
+
+      if (data.token) {
+        Alert.alert('deu certo');
+      } else {
+        Alert.alert('Erro!', `${data.error}`);
+      }
+    } else {
+      Alert.alert(
+        'Preencha todos os campos!',
+        'Você precisa informar seu nome, e-mail e senha para fazer o cadastro.',
+      );
+    }
+  }, [nameField, emailField, passwordField]);
 
   const handleMessageButtonClick = useCallback(() => {
     navigation.reset({
