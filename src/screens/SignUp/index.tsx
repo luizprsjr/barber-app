@@ -1,5 +1,9 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useContext, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import {UserContext} from '../../contexts/UserContext';
+
 import {
   Container,
   InputArea,
@@ -21,6 +25,8 @@ import LockIcon from '../../assets/lock.svg';
 import {Alert} from 'react-native';
 
 const SignUp: React.FC = () => {
+  const {dispatch: userDispatch} = useContext(UserContext);
+
   const navigation = useNavigation();
 
   const [nameField, setNameField] = useState('');
@@ -35,10 +41,19 @@ const SignUp: React.FC = () => {
         password: passwordField,
       });
 
-      console.log(data);
-
       if (data.token) {
-        Alert.alert('deu certo');
+        await AsyncStorage.setItem('token', data.token);
+
+        userDispatch({
+          type: 'setAvatar',
+          payload: {
+            avatar: data.data.avatar,
+          },
+        });
+
+        navigation.reset({
+          routes: [{name: 'MainTab'}],
+        });
       } else {
         Alert.alert('Erro!', `${data.error}`);
       }
@@ -48,7 +63,7 @@ const SignUp: React.FC = () => {
         'Você precisa informar seu nome, e-mail e senha para fazer o cadastro.',
       );
     }
-  }, [nameField, emailField, passwordField]);
+  }, [nameField, emailField, passwordField, navigation, userDispatch]);
 
   const handleMessageButtonClick = useCallback(() => {
     navigation.reset({
