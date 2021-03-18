@@ -8,7 +8,11 @@ import Geolocation, {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import api from '../../services/api';
+import colors from '../../utils/colors';
 import IBarber from '../../interfaces/Barber';
+
+import SearchIcon from '../../assets/search.svg';
+import MyLocationIcon from '../../assets/my_location.svg';
 
 import {
   Container,
@@ -21,11 +25,6 @@ import {
   LocationFinder,
   LoadingIcon,
 } from './styles';
-
-import colors from '../../utils/colors';
-
-import SearchIcon from '../../assets/search.svg';
-import MyLocationIcon from '../../assets/my_location.svg';
 
 const Home: React.FC = () => {
   const navigation = useNavigation();

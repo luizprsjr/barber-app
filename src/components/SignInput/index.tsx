@@ -1,7 +1,9 @@
 import React from 'react';
-import {InputArea, Input} from './styles';
-import colors from '../../utils/colors';
 import Svg from 'react-native-svg';
+
+import colors from '../../utils/colors';
+
+import {InputArea, Input} from './styles';
 
 interface SignInputProps {
   IconSvg: Svg;

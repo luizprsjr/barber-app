@@ -1,4 +1,5 @@
 import React, {createContext, useReducer} from 'react';
+
 import {initialState, UserReducer} from '../reducers/UserReducer';
 import {IUser, IUserActions} from '../interfaces/User';
 

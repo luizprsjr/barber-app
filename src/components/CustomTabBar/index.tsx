@@ -4,6 +4,13 @@ import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import {UserContext} from '../../contexts/UserContext';
 
 import colors from '../../utils/colors';
+
+import HomeIcon from '../../assets/home.svg';
+import SearchIcon from '../../assets/search.svg';
+import TodayIcon from '../../assets/today.svg';
+import FavoriteIcon from '../../assets/favorite.svg';
+import AccountIcon from '../../assets/account.svg';
+
 import {
   TabArea,
   TabItem,
@@ -12,12 +19,6 @@ import {
   activeScreen,
   disabledScreen,
 } from './styles';
-
-import HomeIcon from '../../assets/home.svg';
-import SearchIcon from '../../assets/search.svg';
-import TodayIcon from '../../assets/today.svg';
-import FavoriteIcon from '../../assets/favorite.svg';
-import AccountIcon from '../../assets/account.svg';
 
 const CustomTabBar: React.FC<BottomTabBarProps> = ({state, navigation}) => {
   const {state: user} = useContext(UserContext);

@@ -1,8 +1,18 @@
 import React, {useCallback, useContext, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Alert} from 'react-native';
 
 import {UserContext} from '../../contexts/UserContext';
+
+import api from '../../services/api';
+
+import SignInput from '../../components/SignInput';
+
+import BarberLogo from '../../assets/barber.svg';
+import PersonlIcon from '../../assets/person.svg';
+import EmailIcon from '../../assets/email.svg';
+import LockIcon from '../../assets/lock.svg';
 
 import {
   Container,
@@ -13,16 +23,6 @@ import {
   SignMessageButtonText,
   SignMessageButtonTextBold,
 } from './styles';
-
-import api from '../../services/api';
-
-import SignInput from '../../components/SignInput';
-
-import BarberLogo from '../../assets/barber.svg';
-import PersonlIcon from '../../assets/person.svg';
-import EmailIcon from '../../assets/email.svg';
-import LockIcon from '../../assets/lock.svg';
-import {Alert} from 'react-native';
 
 const SignUp: React.FC = () => {
   const {dispatch: userDispatch} = useContext(UserContext);
