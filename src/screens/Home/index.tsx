@@ -1,4 +1,15 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
+import {Alert, Platform} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {request, PERMISSIONS} from 'react-native-permissions';
+import Geolocation, {
+  GeolocationResponse,
+} from '@react-native-community/geolocation';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import api from '../../services/api';
+import IBarber from '../../interfaces/Barber';
+
 import {
   Container,
   Scroller,
@@ -8,6 +19,7 @@ import {
   LocationArea,
   LocationInput,
   LocationFinder,
+  LoadingIcon,
 } from './styles';
 
 import colors from '../../utils/colors';
@@ -15,16 +27,61 @@ import colors from '../../utils/colors';
 import SearchIcon from '../../assets/search.svg';
 import MyLocationIcon from '../../assets/my_location.svg';
 
-import {useNavigation} from '@react-navigation/native';
-
 const Home: React.FC = () => {
   const navigation = useNavigation();
 
   const [locationText, setLocationText] = useState('');
+  const [coords, setCoords] = useState<GeolocationResponse | null>(
+    {} as GeolocationResponse,
+  );
+  const [loading, setLoading] = useState(false);
+  const [list, setList] = useState<IBarber[]>([]);
 
   const goToSearch = useCallback(() => {
     navigation.navigate('Search');
   }, [navigation]);
+
+  const getBarbers = useCallback(async () => {
+    setLoading(true);
+    setList([]);
+
+    const token = await AsyncStorage.getItem('token');
+    const {data: response} = await api.get(`/barbers?token=${token}`);
+
+    if (!response.error) {
+      setList(response.data);
+    } else {
+      Alert.alert('Erro', `${response.error}`);
+    }
+
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    getBarbers();
+  }, [getBarbers]);
+
+  const handleLocationFinder = useCallback(async () => {
+    setCoords(null);
+
+    const result = await request(
+      Platform.OS === 'android'
+        ? PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
+        : PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+    );
+
+    if (result === 'granted') {
+      setLoading(true);
+      setLocationText('');
+      setList([]);
+
+      Geolocation.getCurrentPosition((info) => {
+        console.log(info);
+        setCoords(info);
+        getBarbers();
+      });
+    }
+  }, [getBarbers]);
 
   return (
     <Container>
@@ -46,10 +103,12 @@ const Home: React.FC = () => {
             onChangeText={(text) => setLocationText(text)}
             selectionColor={colors.white}
           />
-          <LocationFinder>
+          <LocationFinder onPress={handleLocationFinder}>
             <MyLocationIcon width="24" height="24" fill={colors.white} />
           </LocationFinder>
         </LocationArea>
+
+        {loading && <LoadingIcon size="large" color={colors.white} />}
       </Scroller>
     </Container>
   );
