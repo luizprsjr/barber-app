@@ -11,6 +11,8 @@ import api from '../../services/api';
 import colors from '../../utils/colors';
 import IBarber from '../../interfaces/Barber';
 
+import BarberItem from '../../components/BarberItem';
+
 import SearchIcon from '../../assets/search.svg';
 import MyLocationIcon from '../../assets/my_location.svg';
 
@@ -24,6 +26,7 @@ import {
   LocationInput,
   LocationFinder,
   LoadingIcon,
+  ListArea,
 } from './styles';
 
 const Home: React.FC = () => {
@@ -48,6 +51,10 @@ const Home: React.FC = () => {
     const {data: response} = await api.get(`/barbers?token=${token}`);
 
     if (!response.error) {
+      if (response.loc) {
+        setLocationText(response.loc);
+      }
+
       setList(response.data);
     } else {
       Alert.alert('Erro', `${response.error}`);
@@ -55,10 +62,6 @@ const Home: React.FC = () => {
 
     setLoading(false);
   }, []);
-
-  useEffect(() => {
-    getBarbers();
-  }, [getBarbers]);
 
   const handleLocationFinder = useCallback(async () => {
     setCoords(null);
@@ -80,6 +83,10 @@ const Home: React.FC = () => {
         getBarbers();
       });
     }
+  }, [getBarbers]);
+
+  useEffect(() => {
+    getBarbers();
   }, [getBarbers]);
 
   return (
@@ -108,6 +115,12 @@ const Home: React.FC = () => {
         </LocationArea>
 
         {loading && <LoadingIcon size="large" color={colors.white} />}
+
+        <ListArea>
+          {list.map((item, key) => (
+            <BarberItem key={key} data={item} />
+          ))}
+        </ListArea>
       </Scroller>
     </Container>
   );
