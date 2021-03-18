@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Alert, Platform} from 'react-native';
+import {Alert, Platform, RefreshControl} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {request, PERMISSIONS} from 'react-native-permissions';
 import Geolocation, {
@@ -33,11 +33,13 @@ const Home: React.FC = () => {
   const navigation = useNavigation();
 
   const [locationText, setLocationText] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [coords, setCoords] = useState<GeolocationResponse | null>(
     {} as GeolocationResponse,
   );
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState<IBarber[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const goToSearch = useCallback(() => {
     navigation.navigate('Search');
@@ -85,13 +87,21 @@ const Home: React.FC = () => {
     }
   }, [getBarbers]);
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(false);
+    getBarbers();
+  }, [getBarbers]);
+
   useEffect(() => {
     getBarbers();
   }, [getBarbers]);
 
   return (
     <Container>
-      <Scroller>
+      <Scroller
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <HeaderArea>
           <HeaderTitle numberOfLines={2}>
             Encontre o seu barbeiro favorito
