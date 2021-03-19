@@ -33,7 +33,6 @@ const Home: React.FC = () => {
   const navigation = useNavigation();
 
   const [locationText, setLocationText] = useState('');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [coords, setCoords] = useState<GeolocationResponse | null>(
     {} as GeolocationResponse,
   );
@@ -49,8 +48,19 @@ const Home: React.FC = () => {
     setLoading(true);
     setList([]);
 
+    let lat = null;
+    let lng = null;
+
+    if (coords?.coords) {
+      lat = coords.coords.latitude;
+      lng = coords.coords.longitude;
+    }
+
     const token = await AsyncStorage.getItem('token');
-    const {data: response} = await api.get(`/barbers?token=${token}`);
+
+    const {data: response} = await api.get(
+      `/barbers?token=${token}&lat=${lat}&lng=${lng}&address=${locationText}`,
+    );
 
     if (!response.error) {
       if (response.loc) {
@@ -63,7 +73,7 @@ const Home: React.FC = () => {
     }
 
     setLoading(false);
-  }, []);
+  }, [coords, locationText]);
 
   const handleLocationFinder = useCallback(async () => {
     setCoords(null);
@@ -80,7 +90,6 @@ const Home: React.FC = () => {
       setList([]);
 
       Geolocation.getCurrentPosition((info) => {
-        console.log(info);
         setCoords(info);
         getBarbers();
       });
@@ -92,9 +101,14 @@ const Home: React.FC = () => {
     getBarbers();
   }, [getBarbers]);
 
-  useEffect(() => {
+  const handleLocationSearch = useCallback(() => {
+    setCoords(null);
     getBarbers();
   }, [getBarbers]);
+
+  useEffect(() => {
+    getBarbers();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Container>
@@ -117,6 +131,7 @@ const Home: React.FC = () => {
             placeholderTextColor={colors.white}
             value={locationText}
             onChangeText={(text) => setLocationText(text)}
+            onEndEditing={handleLocationSearch}
             selectionColor={colors.white}
           />
           <LocationFinder onPress={handleLocationFinder}>
