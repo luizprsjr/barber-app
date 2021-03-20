@@ -14,7 +14,9 @@ const Profile: React.FC = () => {
 
     try {
       await api.post('/auth/logout', {token});
-      navigation.navigate('SignIn');
+      navigation.reset({
+        routes: [{name: 'SignIn'}],
+      });
     } catch (error) {
       console.log('ERROR: ', error);
     }
