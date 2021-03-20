@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useCallback} from 'react';
+import {useNavigation} from '@react-navigation/native';
 
 import IBarber from '../../interfaces/Barber';
 
@@ -18,8 +19,19 @@ interface BarberItemProps {
 }
 
 const BarberItem: React.FC<BarberItemProps> = ({data}) => {
+  const navigation = useNavigation();
+
+  const handleClick = useCallback(() => {
+    navigation.navigate('Barber', {
+      id: data.id,
+      avatar: data.avatar,
+      name: data.name,
+      stars: data.stars,
+    });
+  }, [navigation, data]);
+
   return (
-    <Area>
+    <Area onPress={handleClick}>
       <Avatar source={{uri: data.avatar}} />
       <InfoArea>
         <UserName>{data.name}</UserName>
