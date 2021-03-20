@@ -1,12 +1,27 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Text} from 'react-native';
+import {Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import Swiper from 'react-native-swiper';
 
 import IBarber from '../../interfaces/Barber';
 import api from '../../services/api';
 
-import {Container} from './styles';
+import {
+  Container,
+  Scroller,
+  SwipeDot,
+  SwipeDotActive,
+  SwipeItem,
+  SwipeImage,
+  swiperStyle,
+  paginationStyle,
+  FakeSwiper,
+  PageBody,
+  UserInfoArea,
+  ServiceArea,
+  TestmonialArea,
+} from './styles';
 
 type ParamList = {
   Barber: IBarber;
@@ -42,7 +57,30 @@ const Barber: React.FC = () => {
 
   return (
     <Container>
-      <Text>Barbeiro: {barberInfo.name}</Text>
+      <Scroller>
+        {barberInfo.photos && barberInfo.photos.length > 0 ? (
+          <Swiper
+            style={swiperStyle}
+            dot={<SwipeDot />}
+            activeDot={<SwipeDotActive />}
+            paginationStyle={paginationStyle}
+            autoplay={true}>
+            {barberInfo.photos.map((item, key) => (
+              <SwipeItem key={key}>
+                <SwipeImage source={{uri: item.url}} resizeMode="cover" />
+              </SwipeItem>
+            ))}
+          </Swiper>
+        ) : (
+          <FakeSwiper />
+        )}
+
+        <PageBody>
+          <UserInfoArea />
+          <ServiceArea />
+          <TestmonialArea />
+        </PageBody>
+      </Scroller>
     </Container>
   );
 };
