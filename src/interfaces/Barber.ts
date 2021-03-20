@@ -3,7 +3,7 @@ export default interface IBarber {
   name: string;
   avatar: string;
   stars: number;
-  latitude: string;
-  longitude: string;
-  distance: number;
+  latitude?: string;
+  longitude?: string;
+  distance?: number;
 }
