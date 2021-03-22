@@ -92,6 +92,7 @@ const Barber: React.FC = () => {
   }, [navigation]);
 
   const handleFavClick = useCallback(() => {
+    // TODO: conectar com a api, por enquanto não existe a rota
     setFavorited(!favorited);
   }, [favorited]);
 
