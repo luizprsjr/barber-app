@@ -9,6 +9,7 @@ import IBarber from '../../interfaces/Barber';
 import api from '../../services/api';
 import colors from '../../utils/colors';
 
+import FavoriteFullIcon from '../../assets/favorite_full.svg';
 import FavoriteIcon from '../../assets/favorite.svg';
 import BackIcon from '../../assets/back.svg';
 import NavPrevIcon from '../../assets/nav_prev.svg';
@@ -63,6 +64,7 @@ const Barber: React.FC = () => {
     stars: route.params.stars,
   });
   const [loading, setLoading] = useState(false);
+  const [favorited, setFavorited] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -72,6 +74,7 @@ const Barber: React.FC = () => {
 
       if (!data.error) {
         setBarberInfo(data.data);
+        setFavorited(data.data.favorited);
       } else {
         Alert.alert('Erro!', `${data.error}`);
       }
@@ -83,6 +86,10 @@ const Barber: React.FC = () => {
   const handleBackButton = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
+
+  const handleFavClick = useCallback(() => {
+    setFavorited(!favorited);
+  }, [favorited]);
 
   return (
     <Container>
@@ -113,8 +120,12 @@ const Barber: React.FC = () => {
               <Stars stars={barberInfo.stars} showNumber={true} />
             </BarberInfo>
 
-            <BarberFavButton>
-              <FavoriteIcon width="24" height="24" fill={colors.red} />
+            <BarberFavButton onPress={handleFavClick}>
+              {favorited ? (
+                <FavoriteFullIcon width="24" height="24" fill={colors.red} />
+              ) : (
+                <FavoriteIcon width="24" height="24" fill={colors.red} />
+              )}
             </BarberFavButton>
           </BarberInfoArea>
 
