@@ -1,11 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import Swiper from 'react-native-swiper';
 
+import Stars from '../../components/Stars';
 import IBarber from '../../interfaces/Barber';
 import api from '../../services/api';
+import colors from '../../utils/colors';
+
+import FavoriteIcon from '../../assets/favorite.svg';
+import BackIcon from '../../assets/back.svg';
 
 import {
   Container,
@@ -21,6 +26,11 @@ import {
   UserInfoArea,
   ServiceArea,
   TestmonialArea,
+  UserAvatar,
+  UserInfo,
+  UserInfoName,
+  UserFavButton,
+  BackButton,
 } from './styles';
 
 type ParamList = {
@@ -55,6 +65,10 @@ const Barber: React.FC = () => {
     })();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const handleBackButton = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
   return (
     <Container>
       <Scroller>
@@ -76,11 +90,23 @@ const Barber: React.FC = () => {
         )}
 
         <PageBody>
-          <UserInfoArea />
+          <UserInfoArea>
+            <UserAvatar source={{uri: barberInfo.avatar}} />
+            <UserInfo>
+              <UserInfoName>{barberInfo.name}</UserInfoName>
+              <Stars stars={barberInfo.stars} showNumber={true} />
+            </UserInfo>
+            <UserFavButton>
+              <FavoriteIcon width="24" height="24" fill={colors.red} />
+            </UserFavButton>
+          </UserInfoArea>
           <ServiceArea />
           <TestmonialArea />
         </PageBody>
       </Scroller>
+      <BackButton onPress={handleBackButton}>
+        <BackIcon width="44" height="44" fill={colors.white} />
+      </BackButton>
     </Container>
   );
 };
