@@ -79,7 +79,7 @@ export const BarberFavButton = styled.TouchableOpacity`
   width: 40px;
   height: 40px;
   background-color: ${colors.white};
-  border: 2px solid ${colors.lightGrey};
+  border: 0.5px solid ${colors.lightGrey};
   border-radius: 20px;
   justify-content: center;
   align-items: center;
