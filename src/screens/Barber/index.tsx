@@ -11,6 +11,8 @@ import colors from '../../utils/colors';
 
 import FavoriteIcon from '../../assets/favorite.svg';
 import BackIcon from '../../assets/back.svg';
+import NavPrevIcon from '../../assets/nav_prev.svg';
+import NavNextIcon from '../../assets/nav_next.svg';
 
 import {
   Container,
@@ -38,7 +40,12 @@ import {
   ServiceChooseButton,
   ServiceChooseBtnText,
   BackButton,
-  TestmonialArea,
+  TestimonialArea,
+  testimonialSwiperStyle,
+  TestimonialItem,
+  TestimonialInfo,
+  TestimonialName,
+  TestimonialBody,
 } from './styles';
 
 type ParamList = {
@@ -132,7 +139,31 @@ const Barber: React.FC = () => {
             </ServiceArea>
           )}
 
-          <TestmonialArea />
+          {barberInfo.testimonials && barberInfo.testimonials.length > 0 && (
+            <TestimonialArea>
+              <Swiper
+                style={testimonialSwiperStyle}
+                showsPagination={false}
+                showsButtons={true}
+                prevButton={
+                  <NavPrevIcon width="35" height="35" fill={colors.black} />
+                }
+                nextButton={
+                  <NavNextIcon width="35" height="35" fill={colors.black} />
+                }>
+                {barberInfo.testimonials.map((item, key) => (
+                  <TestimonialItem key={key}>
+                    <TestimonialInfo>
+                      <TestimonialName>{item.name}</TestimonialName>
+                      <Stars stars={item.rate} showNumber={false} />
+                    </TestimonialInfo>
+
+                    <TestimonialBody>{item.body}</TestimonialBody>
+                  </TestimonialItem>
+                ))}
+              </Swiper>
+            </TestimonialArea>
+          )}
         </PageBody>
       </Scroller>
       <BackButton onPress={handleBackButton}>
