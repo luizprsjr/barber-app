@@ -4,10 +4,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import Swiper from 'react-native-swiper';
 
-import Stars from '../../components/Stars';
 import IBarber from '../../interfaces/Barber';
 import api from '../../services/api';
 import colors from '../../utils/colors';
+
+import Stars from '../../components/Stars';
+import BarberModal from '../../components/BarberModal';
 
 import FavoriteFullIcon from '../../assets/favorite_full.svg';
 import FavoriteIcon from '../../assets/favorite.svg';
@@ -65,6 +67,8 @@ const Barber: React.FC = () => {
   });
   const [loading, setLoading] = useState(false);
   const [favorited, setFavorited] = useState(false);
+  const [selectedService, setSelectedService] = useState<number | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -90,6 +94,11 @@ const Barber: React.FC = () => {
   const handleFavClick = useCallback(() => {
     setFavorited(!favorited);
   }, [favorited]);
+
+  const handleServiceChoose = useCallback((key: number) => {
+    setSelectedService(key);
+    setShowModal(true);
+  }, []);
 
   return (
     <Container>
@@ -142,7 +151,7 @@ const Barber: React.FC = () => {
                     <ServicePrice>R$ {item.price}</ServicePrice>
                   </ServiceInfo>
 
-                  <ServiceChooseButton>
+                  <ServiceChooseButton onPress={() => handleServiceChoose(key)}>
                     <ServiceChooseBtnText>Agendar</ServiceChooseBtnText>
                   </ServiceChooseButton>
                 </ServiceItem>
@@ -180,6 +189,13 @@ const Barber: React.FC = () => {
       <BackButton onPress={handleBackButton}>
         <BackIcon width="44" height="44" fill={colors.white} />
       </BackButton>
+
+      <BarberModal
+        show={showModal}
+        setShow={setShowModal}
+        barber={barberInfo}
+        service={selectedService}
+      />
     </Container>
   );
 };
