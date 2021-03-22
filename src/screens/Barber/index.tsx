@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
@@ -23,14 +23,22 @@ import {
   paginationStyle,
   FakeSwiper,
   PageBody,
-  UserInfoArea,
+  BarberInfoArea,
+  BarberAvatar,
+  BarberInfo,
+  BarberInfoName,
+  BarberFavButton,
+  LoadingIcon,
   ServiceArea,
-  TestmonialArea,
-  UserAvatar,
-  UserInfo,
-  UserInfoName,
-  UserFavButton,
+  ServicesTitle,
+  ServiceItem,
+  ServiceInfo,
+  ServiceName,
+  ServicePrice,
+  ServiceChooseButton,
+  ServiceChooseBtnText,
   BackButton,
+  TestmonialArea,
 } from './styles';
 
 type ParamList = {
@@ -47,7 +55,7 @@ const Barber: React.FC = () => {
     name: route.params.name,
     stars: route.params.stars,
   });
-  const [ĺoading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -90,17 +98,40 @@ const Barber: React.FC = () => {
         )}
 
         <PageBody>
-          <UserInfoArea>
-            <UserAvatar source={{uri: barberInfo.avatar}} />
-            <UserInfo>
-              <UserInfoName>{barberInfo.name}</UserInfoName>
+          <BarberInfoArea>
+            <BarberAvatar source={{uri: barberInfo.avatar}} />
+
+            <BarberInfo>
+              <BarberInfoName>{barberInfo.name}</BarberInfoName>
               <Stars stars={barberInfo.stars} showNumber={true} />
-            </UserInfo>
-            <UserFavButton>
+            </BarberInfo>
+
+            <BarberFavButton>
               <FavoriteIcon width="24" height="24" fill={colors.red} />
-            </UserFavButton>
-          </UserInfoArea>
-          <ServiceArea />
+            </BarberFavButton>
+          </BarberInfoArea>
+
+          {loading && <LoadingIcon size="large" color={colors.darkBlue} />}
+
+          {barberInfo.services && (
+            <ServiceArea>
+              <ServicesTitle>Lista de Serviços</ServicesTitle>
+
+              {barberInfo.services.map((item, key) => (
+                <ServiceItem key={key}>
+                  <ServiceInfo>
+                    <ServiceName>{item.name}</ServiceName>
+                    <ServicePrice>R$ {item.price}</ServicePrice>
+                  </ServiceInfo>
+
+                  <ServiceChooseButton>
+                    <ServiceChooseBtnText>Agendar</ServiceChooseBtnText>
+                  </ServiceChooseButton>
+                </ServiceItem>
+              ))}
+            </ServiceArea>
+          )}
+
           <TestmonialArea />
         </PageBody>
       </Scroller>

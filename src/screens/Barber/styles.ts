@@ -48,12 +48,12 @@ export const PageBody = styled.View`
   min-height: 400px;
 `;
 
-export const UserInfoArea = styled.View`
+export const BarberInfoArea = styled.View`
   flex-direction: row;
   margin-top: -30px;
 `;
 
-export const UserAvatar = styled.Image`
+export const BarberAvatar = styled.Image`
   width: 110px;
   height: 110px;
   border-radius: 20px;
@@ -63,19 +63,19 @@ export const UserAvatar = styled.Image`
   border-color: ${colors.white};
 `;
 
-export const UserInfo = styled.View`
+export const BarberInfo = styled.View`
   flex: 1;
   justify-content: flex-end;
 `;
 
-export const UserInfoName = styled.Text`
+export const BarberInfoName = styled.Text`
   color: ${colors.black};
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 10px;
 `;
 
-export const UserFavButton = styled.TouchableOpacity`
+export const BarberFavButton = styled.TouchableOpacity`
   width: 40px;
   height: 40px;
   background-color: ${colors.white};
@@ -88,7 +88,55 @@ export const UserFavButton = styled.TouchableOpacity`
   margin-right: 20px;
 `;
 
-export const ServiceArea = styled.View``;
+export const LoadingIcon = styled.ActivityIndicator`
+  margin-top: 50px;
+`;
+
+export const ServiceArea = styled.View`
+  margin-top: 30px;
+`;
+
+export const ServicesTitle = styled.Text`
+  font-size: 18px;
+  font-weight: bold;
+  color: ${colors.darkBlue};
+  margin-left: 30px;
+  margin-bottom: 20px;
+`;
+
+export const ServiceItem = styled.View`
+  flex-direction: row;
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-bottom: 20px;
+`;
+
+export const ServiceInfo = styled.View`
+  flex: 1;
+`;
+
+export const ServiceName = styled.Text`
+  font-size: 16px;
+  font-weight: bold;
+  color: ${colors.darkBlue};
+`;
+
+export const ServicePrice = styled.Text`
+  font-size: 14px;
+  color: ${colors.darkBlue};
+`;
+
+export const ServiceChooseButton = styled.TouchableOpacity`
+  background-color: ${colors.tabBlue};
+  border-radius: 10px;
+  padding: 10px 15px;
+`;
+
+export const ServiceChooseBtnText = styled.Text`
+  font-size: 14px;
+  font-weight: bold;
+  color: ${colors.white};
+`;
 
 export const TestmonialArea = styled.View``;
 
