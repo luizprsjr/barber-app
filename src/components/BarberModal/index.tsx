@@ -15,6 +15,9 @@ import {
   BarberInfo,
   BarberAvatar,
   BarberName,
+  ServiceInfo,
+  ServiceName,
+  ServicePrice,
 } from './styles';
 
 interface BarberModalProps {
@@ -50,6 +53,17 @@ const BarberModal: React.FC<BarberModalProps> = ({
               <BarberName>{barber.name}</BarberName>
             </BarberInfo>
           </ModalItem>
+
+          {typeof service === 'number' && barber.services && (
+            <ModalItem>
+              <ServiceInfo>
+                <ServiceName>{barber.services[service].name}</ServiceName>
+                <ServicePrice>
+                  R$ {barber.services[service].price.toFixed(2)}
+                </ServicePrice>
+              </ServiceInfo>
+            </ModalItem>
+          )}
         </ModalBody>
       </ModalArea>
     </Modal>

@@ -46,3 +46,18 @@ export const BarberName = styled.Text`
   font-weight: bold;
   color: ${colors.black};
 `;
+
+export const ServiceInfo = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const ServiceName = styled.Text`
+  font-size: 16px;
+  font-weight: bold;
+`;
+
+export const ServicePrice = styled.Text`
+  font-size: 16px;
+  font-weight: bold;
+`;
