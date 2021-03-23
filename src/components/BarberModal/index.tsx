@@ -18,6 +18,8 @@ import {
   ServiceInfo,
   ServiceName,
   ServicePrice,
+  FinishBtn,
+  FinishBtnText,
 } from './styles';
 
 interface BarberModalProps {
@@ -38,6 +40,10 @@ const BarberModal: React.FC<BarberModalProps> = ({
   const handleCloseButton = useCallback(() => {
     setShow(false);
   }, [setShow]);
+
+  const handleFinishClick = useCallback(() => {
+    console.log('test');
+  }, []);
 
   return (
     <Modal transparent={true} visible={show} animationType="slide">
@@ -64,6 +70,10 @@ const BarberModal: React.FC<BarberModalProps> = ({
               </ServiceInfo>
             </ModalItem>
           )}
+
+          <FinishBtn onPress={handleFinishClick}>
+            <FinishBtnText>Finalizar Agendamento</FinishBtnText>
+          </FinishBtn>
         </ModalBody>
       </ModalArea>
     </Modal>

@@ -61,3 +61,17 @@ export const ServicePrice = styled.Text`
   font-size: 16px;
   font-weight: bold;
 `;
+
+export const FinishBtn = styled.TouchableOpacity`
+  background-color: ${colors.darkBlue};
+  height: 60px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+`;
+
+export const FinishBtnText = styled.Text`
+  font-size: 17px;
+  font-weight: bold;
+  color: ${colors.white};
+`;
