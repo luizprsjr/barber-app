@@ -124,21 +124,36 @@ export const FinishBtnText = styled.Text`
   color: ${colors.white};
 `;
 
-export const availableDay = {
+export const TimeList = styled.ScrollView``;
+
+export const TimeItem = styled.TouchableOpacity`
+  width: 75px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+`;
+
+export const TimeItemText = styled.Text`
+  font-size: 16px;
+  font-weight: bold;
+`;
+
+export const available = {
   opacity: 1,
 };
-export const unavailableDay = {
+export const unavailable = {
   opacity: 0.5,
 };
 
-export const selectedDayStyle = {
+export const selectedStyle = {
   backgroundColor: colors.tabBlue,
 };
 
-export const selectedDayText = {
+export const selectedText = {
   color: colors.white,
 };
 
-export const unselectedDayText = {
+export const unselectedText = {
   color: colors.black,
 };

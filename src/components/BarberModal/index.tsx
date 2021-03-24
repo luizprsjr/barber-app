@@ -32,11 +32,14 @@ import {
   DateItem,
   DateItemWeekDay,
   DateItemNumber,
-  availableDay,
-  unavailableDay,
-  selectedDayStyle,
-  selectedDayText,
-  unselectedDayText,
+  available,
+  unavailable,
+  selectedStyle,
+  selectedText,
+  unselectedText,
+  TimeList,
+  TimeItem,
+  TimeItemText,
 } from './styles';
 
 interface BarberModalProps {
@@ -63,9 +66,9 @@ const BarberModal: React.FC<BarberModalProps> = ({
   const [selectedYear, setSelectedYear] = useState(0);
   const [selectedMonth, setSelectedMonth] = useState(0);
   const [selectedDay, setSelectedDay] = useState(0);
-  const [selectedHour, setSelectedHour] = useState<number | null>(null);
+  const [selectedHour, setSelectedHour] = useState<number | string>('');
   const [listDays, setListDays] = useState<IListDays[]>([]);
-  const [listHours, setListHours] = useState([]);
+  const [listHours, setListHours] = useState<string[]>([]);
 
   useEffect(() => {
     let today = new Date();
@@ -103,6 +106,26 @@ const BarberModal: React.FC<BarberModalProps> = ({
       setSelectedHour(0);
     }
   }, [selectedMonth, selectedYear, barber]);
+
+  useEffect(() => {
+    if (barber.available && selectedDay > 0) {
+      let date = new Date(selectedYear, selectedMonth, selectedDay);
+      let year = date.getFullYear();
+      let month: number | string = date.getMonth() + 1;
+      let day: number | string = date.getDate();
+      month = month < 10 ? '0' + month : month;
+      day = day < 10 ? `0${day}` : day;
+      let selDate = `${year}-${month}-${day}`;
+
+      let availability = barber.available?.filter((e) => e.date === selDate);
+
+      if (availability && availability.length > 0) {
+        setListHours(availability[0].hours);
+      }
+    }
+
+    setSelectedHour('');
+  }, [selectedDay, selectedMonth, selectedYear, barber]);
 
   const handlePrevDateClick = useCallback(() => {
     let monthDate = new Date(selectedYear, selectedMonth, 1);
@@ -177,22 +200,22 @@ const BarberModal: React.FC<BarberModalProps> = ({
                     item.status ? setSelectedDay(item.number) : null
                   }
                   style={[
-                    item.status ? availableDay : unavailableDay,
-                    item.number === selectedDay ? selectedDayStyle : null,
+                    item.status ? available : unavailable,
+                    item.number === selectedDay ? selectedStyle : null,
                   ]}>
                   <DateItemWeekDay
                     style={
                       item.number === selectedDay
-                        ? selectedDayText
-                        : unselectedDayText
+                        ? selectedText
+                        : unselectedText
                     }>
                     {item.weekday}
                   </DateItemWeekDay>
                   <DateItemNumber
                     style={
                       item.number === selectedDay
-                        ? selectedDayText
-                        : unselectedDayText
+                        ? selectedText
+                        : unselectedText
                     }>
                     {item.number}
                   </DateItemNumber>
@@ -200,6 +223,28 @@ const BarberModal: React.FC<BarberModalProps> = ({
               ))}
             </DateList>
           </ModalItem>
+
+          {selectedDay > 0 && listHours.length > 0 && (
+            <ModalItem>
+              <TimeList
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}>
+                {listHours.map((item, key) => (
+                  <TimeItem
+                    key={key}
+                    onPress={() => setSelectedHour(item)}
+                    style={item === selectedHour ? selectedStyle : null}>
+                    <TimeItemText
+                      style={
+                        item === selectedHour ? selectedText : unselectedText
+                      }>
+                      {item}
+                    </TimeItemText>
+                  </TimeItem>
+                ))}
+              </TimeList>
+            </ModalItem>
+          )}
 
           <FinishBtn onPress={handleFinishClick}>
             <FinishBtnText>Finalizar Agendamento</FinishBtnText>
