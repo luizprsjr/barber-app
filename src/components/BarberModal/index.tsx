@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 
 import IBarber from '../../interfaces/Barber';
@@ -45,13 +45,41 @@ const BarberModal: React.FC<BarberModalProps> = ({
 }) => {
   const navigation = useNavigation();
 
+  const [selectedYear, setSelectedYear] = useState(0);
+  const [selectedMonth, setSelectedMonth] = useState(0);
+  const [selectedDay, setSelectedDay] = useState(0);
+  const [selectedHour, setSelectedHour] = useState(null);
+  const [listDays, setListDays] = useState([]);
+  const [listHours, setListHours] = useState([]);
+
+  useEffect(() => {
+    let today = new Date();
+    setSelectedYear(today.getFullYear());
+    setSelectedMonth(today.getMonth());
+    setSelectedDay(today.getDate());
+  }, []);
+
+  const handlePrevDateClick = useCallback(() => {
+    let mountDate = new Date(selectedYear, selectedMonth, 1);
+    mountDate.setMonth(mountDate.getMonth() - 1);
+    setSelectedYear(mountDate.getFullYear());
+    setSelectedMonth(mountDate.getMonth());
+    setSelectedDay(1);
+  }, [selectedMonth, selectedYear]);
+
+  const handleNextDateClick = useCallback(() => {
+    let mountDate = new Date(selectedYear, selectedMonth, 1);
+    mountDate.setMonth(mountDate.getMonth() + 1);
+    setSelectedYear(mountDate.getFullYear());
+    setSelectedMonth(mountDate.getMonth());
+    setSelectedDay(1);
+  }, [selectedMonth, selectedYear]);
+
   const handleCloseButton = useCallback(() => {
     setShow(false);
   }, [setShow]);
 
-  const handleFinishClick = useCallback(() => {
-    console.log('test');
-  }, []);
+  const handleFinishClick = useCallback(() => {}, []);
 
   return (
     <Modal transparent={true} visible={show} animationType="slide">
@@ -81,15 +109,17 @@ const BarberModal: React.FC<BarberModalProps> = ({
 
           <ModalItem>
             <DateInfo>
-              <DatePrevArea>
+              <DatePrevArea onPress={handlePrevDateClick}>
                 <NavPrevIcon width="35" height="35" fill={colors.black} />
               </DatePrevArea>
 
               <DateTitleArea>
-                <DateTitle>Setembro 2021</DateTitle>
+                <DateTitle>
+                  {months[selectedMonth]} {selectedYear}
+                </DateTitle>
               </DateTitleArea>
 
-              <DateNextArea>
+              <DateNextArea onPress={handleNextDateClick}>
                 <NavNextIcon width="35" height="35" fill={colors.black} />
               </DateNextArea>
             </DateInfo>
