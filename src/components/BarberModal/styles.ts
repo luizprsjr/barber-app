@@ -62,6 +62,33 @@ export const ServicePrice = styled.Text`
   font-weight: bold;
 `;
 
+export const DateInfo = styled.View`
+  flex-direction: row;
+`;
+
+export const DatePrevArea = styled.TouchableOpacity`
+  flex: 1;
+  justify-content: flex-end;
+  align-items: flex-end;
+`;
+
+export const DateTitleArea = styled.View`
+  width: 140px;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const DateTitle = styled.Text`
+  font-size: 17px;
+  font-weight: bold;
+  color: ${colors.black};
+`;
+
+export const DateNextArea = styled.TouchableOpacity`
+  flex: 1;
+  align-items: flex-start;
+`;
+
 export const FinishBtn = styled.TouchableOpacity`
   background-color: ${colors.darkBlue};
   height: 60px;

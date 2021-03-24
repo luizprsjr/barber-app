@@ -2,9 +2,12 @@ import React, {useCallback} from 'react';
 import {useNavigation} from '@react-navigation/native';
 
 import IBarber from '../../interfaces/Barber';
+import {months, days} from '../../utils/ calendar';
 import colors from '../../utils/colors';
 
 import ExpandIcon from '../../assets/expand.svg';
+import NavPrevIcon from '../../assets/nav_prev.svg';
+import NavNextIcon from '../../assets/nav_next.svg';
 
 import {
   Modal,
@@ -20,6 +23,11 @@ import {
   ServicePrice,
   FinishBtn,
   FinishBtnText,
+  DateInfo,
+  DatePrevArea,
+  DateTitleArea,
+  DateTitle,
+  DateNextArea,
 } from './styles';
 
 interface BarberModalProps {
@@ -70,6 +78,22 @@ const BarberModal: React.FC<BarberModalProps> = ({
               </ServiceInfo>
             </ModalItem>
           )}
+
+          <ModalItem>
+            <DateInfo>
+              <DatePrevArea>
+                <NavPrevIcon width="35" height="35" fill={colors.black} />
+              </DatePrevArea>
+
+              <DateTitleArea>
+                <DateTitle>Setembro 2021</DateTitle>
+              </DateTitleArea>
+
+              <DateNextArea>
+                <NavNextIcon width="35" height="35" fill={colors.black} />
+              </DateNextArea>
+            </DateInfo>
+          </ModalItem>
 
           <FinishBtn onPress={handleFinishClick}>
             <FinishBtnText>Finalizar Agendamento</FinishBtnText>
