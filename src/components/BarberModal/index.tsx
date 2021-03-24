@@ -32,6 +32,11 @@ import {
   DateItem,
   DateItemWeekDay,
   DateItemNumber,
+  availableDay,
+  unavailableDay,
+  selectedDayStyle,
+  selectedDayText,
+  unselectedDayText,
 } from './styles';
 
 interface BarberModalProps {
@@ -104,7 +109,7 @@ const BarberModal: React.FC<BarberModalProps> = ({
     monthDate.setMonth(monthDate.getMonth() - 1);
     setSelectedYear(monthDate.getFullYear());
     setSelectedMonth(monthDate.getMonth());
-    setSelectedDay(1);
+    setSelectedDay(0);
   }, [selectedMonth, selectedYear]);
 
   const handleNextDateClick = useCallback(() => {
@@ -112,7 +117,7 @@ const BarberModal: React.FC<BarberModalProps> = ({
     monthDate.setMonth(monthDate.getMonth() + 1);
     setSelectedYear(monthDate.getFullYear());
     setSelectedMonth(monthDate.getMonth());
-    setSelectedDay(1);
+    setSelectedDay(0);
   }, [selectedMonth, selectedYear]);
 
   const handleCloseButton = useCallback(() => {
@@ -168,11 +173,29 @@ const BarberModal: React.FC<BarberModalProps> = ({
               {listDays.map((item, key) => (
                 <DateItem
                   key={key}
-                  onPress={() => {
-                    console.log('teste');
-                  }}>
-                  <DateItemWeekDay>{item.weekday}</DateItemWeekDay>
-                  <DateItemNumber>{item.number}</DateItemNumber>
+                  onPress={() =>
+                    item.status ? setSelectedDay(item.number) : null
+                  }
+                  style={[
+                    item.status ? availableDay : unavailableDay,
+                    item.number === selectedDay ? selectedDayStyle : null,
+                  ]}>
+                  <DateItemWeekDay
+                    style={
+                      item.number === selectedDay
+                        ? selectedDayText
+                        : unselectedDayText
+                    }>
+                    {item.weekday}
+                  </DateItemWeekDay>
+                  <DateItemNumber
+                    style={
+                      item.number === selectedDay
+                        ? selectedDayText
+                        : unselectedDayText
+                    }>
+                    {item.number}
+                  </DateItemNumber>
                 </DateItem>
               ))}
             </DateList>

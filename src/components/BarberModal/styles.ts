@@ -123,3 +123,22 @@ export const FinishBtnText = styled.Text`
   font-weight: bold;
   color: ${colors.white};
 `;
+
+export const availableDay = {
+  opacity: 1,
+};
+export const unavailableDay = {
+  opacity: 0.5,
+};
+
+export const selectedDayStyle = {
+  backgroundColor: colors.tabBlue,
+};
+
+export const selectedDayText = {
+  color: colors.white,
+};
+
+export const unselectedDayText = {
+  color: colors.black,
+};
