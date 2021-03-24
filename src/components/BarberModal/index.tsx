@@ -28,6 +28,10 @@ import {
   DateTitleArea,
   DateTitle,
   DateNextArea,
+  DateList,
+  DateItem,
+  DateItemWeekDay,
+  DateItemNumber,
 } from './styles';
 
 interface BarberModalProps {
@@ -35,6 +39,12 @@ interface BarberModalProps {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   barber: IBarber;
   service: number | null;
+}
+
+interface IListDays {
+  status: boolean;
+  weekday: string;
+  number: number;
 }
 
 const BarberModal: React.FC<BarberModalProps> = ({
@@ -48,8 +58,8 @@ const BarberModal: React.FC<BarberModalProps> = ({
   const [selectedYear, setSelectedYear] = useState(0);
   const [selectedMonth, setSelectedMonth] = useState(0);
   const [selectedDay, setSelectedDay] = useState(0);
-  const [selectedHour, setSelectedHour] = useState(null);
-  const [listDays, setListDays] = useState([]);
+  const [selectedHour, setSelectedHour] = useState<number | null>(null);
+  const [listDays, setListDays] = useState<IListDays[]>([]);
   const [listHours, setListHours] = useState([]);
 
   useEffect(() => {
@@ -59,19 +69,49 @@ const BarberModal: React.FC<BarberModalProps> = ({
     setSelectedDay(today.getDate());
   }, []);
 
+  useEffect(() => {
+    if (barber.available) {
+      let daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
+      let newListDays: IListDays[] = [];
+
+      for (let i = 1; i <= daysInMonth; i++) {
+        let date = new Date(selectedYear, selectedMonth, i);
+        let year = date.getFullYear();
+        let month: number | string = date.getMonth() + 1;
+        let day: number | string = date.getDate();
+        month = month < 10 ? '0' + month : month;
+        day = day < 10 ? `0${day}` : day;
+        let selDate = `${year}-${month}-${day}`;
+
+        let availability = barber.available?.filter((e) => e.date === selDate);
+
+        newListDays.push({
+          status: availability?.length > 0 ? true : false,
+          weekday: days[date.getDay()],
+          number: i,
+        });
+      }
+
+      setListDays(newListDays);
+      setSelectedDay(0);
+      setListHours([]);
+      setSelectedHour(0);
+    }
+  }, [selectedMonth, selectedYear, barber]);
+
   const handlePrevDateClick = useCallback(() => {
-    let mountDate = new Date(selectedYear, selectedMonth, 1);
-    mountDate.setMonth(mountDate.getMonth() - 1);
-    setSelectedYear(mountDate.getFullYear());
-    setSelectedMonth(mountDate.getMonth());
+    let monthDate = new Date(selectedYear, selectedMonth, 1);
+    monthDate.setMonth(monthDate.getMonth() - 1);
+    setSelectedYear(monthDate.getFullYear());
+    setSelectedMonth(monthDate.getMonth());
     setSelectedDay(1);
   }, [selectedMonth, selectedYear]);
 
   const handleNextDateClick = useCallback(() => {
-    let mountDate = new Date(selectedYear, selectedMonth, 1);
-    mountDate.setMonth(mountDate.getMonth() + 1);
-    setSelectedYear(mountDate.getFullYear());
-    setSelectedMonth(mountDate.getMonth());
+    let monthDate = new Date(selectedYear, selectedMonth, 1);
+    monthDate.setMonth(monthDate.getMonth() + 1);
+    setSelectedYear(monthDate.getFullYear());
+    setSelectedMonth(monthDate.getMonth());
     setSelectedDay(1);
   }, [selectedMonth, selectedYear]);
 
@@ -123,6 +163,19 @@ const BarberModal: React.FC<BarberModalProps> = ({
                 <NavNextIcon width="35" height="35" fill={colors.black} />
               </DateNextArea>
             </DateInfo>
+
+            <DateList horizontal={true} showsHorizontalScrollIndicator={false}>
+              {listDays.map((item, key) => (
+                <DateItem
+                  key={key}
+                  onPress={() => {
+                    console.log('teste');
+                  }}>
+                  <DateItemWeekDay>{item.weekday}</DateItemWeekDay>
+                  <DateItemNumber>{item.number}</DateItemNumber>
+                </DateItem>
+              ))}
+            </DateList>
           </ModalItem>
 
           <FinishBtn onPress={handleFinishClick}>

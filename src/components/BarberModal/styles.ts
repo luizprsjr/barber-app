@@ -89,6 +89,27 @@ export const DateNextArea = styled.TouchableOpacity`
   align-items: flex-start;
 `;
 
+export const DateList = styled.ScrollView``;
+
+export const DateItem = styled.TouchableOpacity`
+  width: 45px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+`;
+
+export const DateItemWeekDay = styled.Text`
+  font-size: 16px;
+  font-weight: bold;
+`;
+
+export const DateItemNumber = styled.Text`
+  font-size: 16px;
+  font-weight: bold;
+`;
+
 export const FinishBtn = styled.TouchableOpacity`
   background-color: ${colors.darkBlue};
   height: 60px;
