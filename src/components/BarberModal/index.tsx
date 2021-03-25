@@ -1,10 +1,10 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alert} from 'react-native';
 
 import IBarber from '../../interfaces/Barber';
-// import api from '../../services/api';
+import api from '../../services/api';
 import {months, days} from '../../utils/ calendar';
 import colors from '../../utils/colors';
 
@@ -153,35 +153,45 @@ const BarberModal: React.FC<BarberModalProps> = ({
   const handleFinishClick = useCallback(async () => {
     if (
       barber.id &&
-      service &&
+      barber.services &&
+      service !== null &&
       selectedYear > 0 &&
       selectedMonth > 0 &&
       selectedDay > 0 &&
       selectedHour
     ) {
-      // TODO: rota /user/appointment ainda não funciona, o código comentado já esta preparado para quando funcionar
-      // const token = await AsyncStorage.getItem('token');
-      // const {data: response} = await api.post('/user/appointment', {
-      //   token,
-      //   id: barber.id,
-      //   service,
-      //   year: selectedYear,
-      //   month: selectedMonth,
-      //   day: selectedDay,
-      //   hour: selectedHour,
-      // });
-      // if (!response.error) {
-      //   setShow(false);
-      //   navigation.navigate('Appointments');
-      // } else {
-      //   Alert.alert('Erro!', `${response.error}`);
-      // }
-
-      // TODO: remover quando a rota /user/appointment funcionar
-      setShow(false);
-      navigation.navigate('Appointments');
+      const token = await AsyncStorage.getItem('token');
+      const {data: response} = await api.post(
+        `barber/${barber.id}/appointment`,
+        {
+          token,
+          service: barber.services[service].id,
+          year: selectedYear,
+          month: selectedMonth + 1,
+          day: selectedDay,
+          hour: selectedHour,
+        },
+      );
+      if (!response.error) {
+        setShow(false);
+        navigation.navigate('Appointments');
+      } else {
+        Alert.alert('Erro!', `${response.error}`);
+      }
     } else {
-      Alert.alert('Erro!', 'Preencha todos os dados.');
+      // Alert.alert('Erro!', 'Preencha todos os dados.');
+      Alert.alert(
+        'Erro! Preencha todos os dados.',
+        `
+        id: ${barber.id}
+        serviços: ${barber.services}
+        serviço: ${service}
+        year: ${selectedYear}
+        month: ${selectedMonth}
+        day: ${selectedDay}
+        hour: ${selectedHour}
+      `,
+      );
     }
   }, [
     barber,
