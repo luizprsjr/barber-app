@@ -1,31 +1,47 @@
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {Container, LoadingIcon} from './styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 
-// import {UserContext} from '../../contexts/UserContext';
+import {UserContext} from '../../contexts/UserContext';
 
-// import api from '../../services/api';
+import api from '../../services/api';
 
 import BarberLogo from '../../assets/barber.svg';
 
 const Preload: React.FC = () => {
-  // const {dispatch: userDispatch} = useContext(UserContext);
+  const {dispatch: userDispatch} = useContext(UserContext);
   const navigation = useNavigation();
 
+  // TODO: ajustar quando a rota /auth/refresh voltar a funcionar corretamente
   useEffect(() => {
     (async () => {
       const token = await AsyncStorage.getItem('token');
 
       if (token) {
-        navigation.reset({
-          routes: [{name: 'MainTab'}],
-        });
+        const {data: response} = await api.get(`/user?token=${token}`);
+
+        console.log(response);
+
+        if (!response.error) {
+          userDispatch({
+            type: 'setAvatar',
+            payload: {
+              avatar: response.data.avatar,
+            },
+          });
+
+          navigation.reset({
+            routes: [{name: 'MainTab'}],
+          });
+        } else {
+          navigation.navigate('SignIn');
+        }
       } else {
         navigation.navigate('SignIn');
       }
     })();
-  }, [navigation]);
+  }, [userDispatch, navigation]);
 
   // useEffect(() => {
   //   (async () => {
