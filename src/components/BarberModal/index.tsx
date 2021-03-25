@@ -1,7 +1,10 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Alert} from 'react-native';
 
 import IBarber from '../../interfaces/Barber';
+// import api from '../../services/api';
 import {months, days} from '../../utils/ calendar';
 import colors from '../../utils/colors';
 
@@ -147,7 +150,49 @@ const BarberModal: React.FC<BarberModalProps> = ({
     setShow(false);
   }, [setShow]);
 
-  const handleFinishClick = useCallback(() => {}, []);
+  const handleFinishClick = useCallback(async () => {
+    if (
+      barber.id &&
+      service &&
+      selectedYear > 0 &&
+      selectedMonth > 0 &&
+      selectedDay > 0 &&
+      selectedHour
+    ) {
+      // TODO: rota /user/appointment ainda não funciona, o código comentado já esta preparado para quando funcionar
+      // const token = await AsyncStorage.getItem('token');
+      // const {data: response} = await api.post('/user/appointment', {
+      //   token,
+      //   id: barber.id,
+      //   service,
+      //   year: selectedYear,
+      //   month: selectedMonth,
+      //   day: selectedDay,
+      //   hour: selectedHour,
+      // });
+      // if (!response.error) {
+      //   setShow(false);
+      //   navigation.navigate('Appointments');
+      // } else {
+      //   Alert.alert('Erro!', `${response.error}`);
+      // }
+
+      // TODO: remover quando a rota /user/appointment funcionar
+      setShow(false);
+      navigation.navigate('Appointments');
+    } else {
+      Alert.alert('Erro!', 'Preencha todos os dados.');
+    }
+  }, [
+    barber,
+    service,
+    selectedYear,
+    selectedMonth,
+    selectedDay,
+    selectedHour,
+    setShow,
+    navigation,
+  ]);
 
   return (
     <Modal transparent={true} visible={show} animationType="slide">
