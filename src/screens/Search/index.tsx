@@ -30,7 +30,7 @@ const Search: React.FC = () => {
 
     if (searchText) {
       const token = await AsyncStorage.getItem('token');
-      let {data: response} = await api.get(
+      const {data: response} = await api.get(
         `/search?q=${searchText}&token=${token}`,
       );
       if (!response.error) {
