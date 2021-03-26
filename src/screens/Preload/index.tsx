@@ -21,8 +21,6 @@ const Preload: React.FC = () => {
       if (token) {
         const {data: response} = await api.get(`/user?token=${token}`);
 
-        console.log(response);
-
         if (!response.error) {
           userDispatch({
             type: 'setAvatar',
